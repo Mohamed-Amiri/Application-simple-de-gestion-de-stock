@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,176 +10,163 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6366f1;
-            --success-color: #22c55e;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-        }
-        
-        body {
-            background-color: #f8f9fa;
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+            --background-color: #F9FAFB;
+            --card-background: #FFFFFF;
         }
 
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        body {
+            background-color: var(--background-color);
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-shadow {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #E5E7EB;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
         }
 
         .card {
             border: none;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        .floating-form {
-            background: white;
             border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .action-buttons .btn {
-            padding: 0.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
+        .card-header {
+            background-color: var(--card-background);
+            border-bottom: 1px solid #E5E7EB;
+            padding: 1.5rem;
         }
 
-        .btn-edit {
-            background-color: #FEF3C7;
-            color: #D97706;
-            border: none;
-        }
-
-        .btn-edit:hover {
-            background-color: #FDE68A;
-            color: #B45309;
-            transform: scale(1.05);
-        }
-
-        .btn-delete {
-            background-color: #FEE2E2;
-            color: #DC2626;
-            border: none;
-        }
-
-        .btn-delete:hover {
-            background-color: #FCA5A5;
-            color: #B91C1C;
-            transform: scale(1.05);
-        }
-
-        .category-badge {
-            display: inline-block;
-            padding: 0.35rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
+        .list-group-item {
+            padding: 1rem 1.5rem;
+            border-left: none;
+            border-right: none;
         }
 
         .product-card {
             transition: all 0.2s ease;
-            cursor: pointer;
         }
 
         .product-card:hover {
-            background-color: #f8f9fa;
+            background-color: #F9FAFB;
         }
 
-        .modal-content {
-            border-radius: 1rem;
-            border: none;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .category-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
-        .delete-modal-icon {
-            width: 4rem;
-            height: 4rem;
-            background-color: #FEE2E2;
-            color: #DC2626;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            font-size: 1.5rem;
-            animation: pulse 1.5s infinite;
+        .floating-form {
+            animation: slideIn 0.3s ease;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .search-input {
-            border-radius: 2rem;
-            padding-left: 2.5rem;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="#">StockMaster</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Rapports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Paramètres</a>
-                    </li>
-                </ul>
+    <!-- Toast Notification -->
+    <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Opération réussie!
             </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white nav-shadow mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-box-open me-2"></i>
+                Stock Master
+            </a>
         </div>
     </nav>
 
-    <div class="container py-5">
-        <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="card h-100">
-                    <div class="card-header bg-white border-0 py-4">
-                        <h4 class="mb-0 fw-bold" id="formTitle">Ajouter un produit</h4>
+    <div class="container">
+        <div class="row">
+            <!-- Add Product Form -->
+            <div class="col-lg-4 mb-4">
+                <div class="card floating-form">
+                    <div class="card-header border-0">
+                        <h5 class="mb-0">Ajouter un produit</h5>
                     </div>
-                    <div class="card-body pt-0">
-                        <form id="productForm" class="needs-validation" novalidate>
-                            <input type="hidden" id="productId">
+                    <div class="card-body">
+                        <form id="taskForm" class="needs-validation" novalidate>
                             <div class="mb-3">
-                                <label for="title" class="form-label">Nom du produit</label>
-                                <input type="text" class="form-control" id="title" required>
-                                <div class="invalid-feedback">Veuillez saisir un nom valide</div>
+                                <label for="title" class="form-label">Nom</label>
+                                <input type="text" class="form-control" id="title" placeholder="Nom du produit" required>
+                                <div class="invalid-feedback">Veuillez fournir un nom.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" rows="3" required></textarea>
-                                <div class="invalid-feedback">Veuillez saisir une description</div>
+                                <textarea class="form-control" id="description" rows="3" placeholder="Description du produit" required></textarea>
+                                <div class="invalid-feedback">Veuillez fournir une description.</div>
                             </div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-6">
+                            <div class="row mb-3">
+                                <div class="col-6">
                                     <label for="quantity" class="form-label">Quantité</label>
-                                    <input type="number" class="form-control" id="quantity" min="50" max="200" required>
-                                    <div class="invalid-feedback">50-200 unités requis</div>
+                                    <input type="number" id="quantity" class="form-control" value="50" min="0" required>
+                                    <div class="invalid-feedback">Quantité invalide.</div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-6">
                                     <label for="price" class="form-label">Prix (€)</label>
-                                    <input type="number" class="form-control" id="price" min="30" max="150" required>
-                                    <div class="invalid-feedback">30-150€ requis</div>
+                                    <input type="number" id="price" class="form-control" value="30" min="0" step="0.01" required>
+                                    <div class="invalid-feedback">Prix invalide.</div>
                                 </div>
                             </div>
                             <div class="mb-4">
@@ -190,13 +176,11 @@
                                     <option value="vetements">Vêtements</option>
                                     <option value="alimentation">Alimentation</option>
                                 </select>
+                                <div class="invalid-feedback">Veuillez sélectionner une catégorie.</div>
                             </div>
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary py-2">
-                                    <i class="fas fa-plus me-2"></i>Ajouter produit
-                                </button>
-                                <button type="button" id="cancelButton" class="btn btn-outline-secondary" style="display: none;">
-                                    Annuler modification
+                            <div class="d-grid">
+                                <button type="button" id="buttonNew" class="btn btn-primary">
+                                    <i class="fas fa-plus me-2"></i>Ajouter le produit
                                 </button>
                             </div>
                         </form>
@@ -204,76 +188,183 @@
                 </div>
             </div>
 
+            <!-- Product List -->
             <div class="col-lg-8">
                 <div class="card">
-                    <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-center py-4">
-                        <h4 class="mb-3 mb-md-0 fw-bold">Liste des produits</h4>
-                        <div class="position-relative w-100 ms-md-3" style="max-width: 400px;">
-                            <i class="fas fa-search search-icon text-muted"></i>
-                            <input type="text" id="searchInput" class="form-control search-input" placeholder="Rechercher...">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Mes produits</h5>
+                        <div class="input-group w-50">
+                            <span class="input-group-text border-0 bg-transparent">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control border-0" id="searchInput" placeholder="Rechercher un produit...">
                         </div>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="list-group list-group-flush" id="productList">
-                            <!-- Dynamic content -->
-                        </div>
+                    <div class="list-group list-group-flush" id="productList">
+                        <!-- Product items will be dynamically added here -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body text-center p-5">
-                    <div class="delete-modal-icon mb-4">
-                        <i class="fas fa-exclamation"></i>
-                    </div>
-                    <h4 class="mb-3 fw-bold">Confirmer la suppression</h4>
-                    <p class="text-muted mb-4">Êtes-vous sûr de vouloir supprimer définitivement ce produit ?</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <button type="button" class="btn btn-lg btn-light" data-bs-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-lg btn-danger" id="confirmDelete">Supprimer</button>
-                    </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Modifier le Produit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="editProductId">
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="editTitle" required>
+                            <div class="invalid-feedback">Veuillez fournir un nom.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editDescription" rows="3" required></textarea>
+                            <div class="invalid-feedback">Veuillez fournir une description.</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="editQuantity" class="form-label">Quantité</label>
+                                <input type="number" id="editQuantity" class="form-control" min="0" required>
+                                <div class="invalid-feedback">Quantité invalide.</div>
+                            </div>
+                            <div class="col-6">
+                                <label for="editPrice" class="form-label">Prix (€)</label>
+                                <input type="number" id="editPrice" class="form-control" min="0" step="0.01" required>
+                                <div class="invalid-feedback">Prix invalide.</div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="editCategory" class="form-label">Catégorie</label>
+                            <select class="form-select" id="editCategory" required>
+                                <option value="electronique">Électronique</option>
+                                <option value="vetements">Vêtements</option>
+                                <option value="alimentation">Alimentation</option>
+                            </select>
+                            <div class="invalid-feedback">Veuillez sélectionner une catégorie.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="saveEditButton">Enregistrer les modifications</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // JavaScript remains mostly the same with improved form validation
-        document.addEventListener('DOMContentLoaded', function() {
-            // ... [Previous JavaScript code] ...
-            
-            // Add form validation enhancements
-            Array.prototype.slice.call(document.querySelectorAll('.needs-validation'))
-                .forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
+        // Initialize Bootstrap toast
+        const toast = new bootstrap.Toast(document.querySelector('.toast'));
 
-                        form.classList.add('was-validated')
-                    }, false)
-                })
+        // Global products array
+        let products = [];
+
+        // Form validation setup
+        function setupFormValidation() {
+            const forms = document.querySelectorAll('.needs-validation');
             
-            // Add success notification function
-            function showSuccessAlert(message) {
-                const alert = document.createElement('div')
-                alert.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-4'
-                alert.style.zIndex = 1000
-                alert.innerHTML = `
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `
-                document.body.appendChild(alert)
-                
-                setTimeout(() => alert.remove(), 3000)
+            forms.forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                });
+            });
+        }
+
+        // Show success notification
+        function showNotification(message) {
+            const toastBody = document.querySelector('.toast-body');
+            toastBody.textContent = message;
+            toast.show();
+        }
+
+        // Add Product logic
+        document.getElementById("buttonNew").addEventListener("click", function() {
+            const form = document.getElementById("taskForm");
+            
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
             }
-        })
-    </script>
-</body>
-</html>
+
+            const title = document.getElementById("title").value;
+            const description = document.getElementById("description").value;
+            const quantity = document.getElementById("quantity").value;
+            const price = document.getElementById("price").value;
+            const category = document.getElementById("category").value;
+            
+            const product = {
+                id: Date.now(),
+                title,
+                description,
+                quantity,
+                price,
+                category
+            };
+
+            // Add the new product to the products array
+            products.push(product);
+
+            // Update the UI
+            updateProductList(product);
+
+            // Reset the form
+            form.reset();
+            form.classList.remove('was-validated');
+
+            // Show success notification
+            showNotification('Produit ajouté avec succès!');
+        });
+
+        function updateProductList(product) {
+            const productList = document.getElementById("productList");
+            const productItem = document.createElement("li");
+            productItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center", "product-card");
+            productItem.setAttribute('data-id', product.id);
+            
+            productItem.innerHTML = `
+                <div class="d-flex flex-column">
+                    <h6 class="mb-1">${product.title}</h6>
+                    <p class="mb-1 text-muted small">${product.description}</p>
+                    <div class="d-flex gap-2">
+                        <span class="category-badge bg-light text-dark">${product.category}</span>
+                        <span class="text-primary">${product.price}€</span>
+                        <span class="text-secondary">Stock: ${product.quantity}</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="editProduct(${product.id})">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </div>
+            `;
+            
+            productList.appendChild(productItem);
+        }
+
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            // Populate modal form with product data
+            document.getElementById("editProductId").value = product.id;
+            document.getElementById("editTitle").value = product.title;
+            document.getElementById("editDescription").value = product.description;
+            document.getElementById("editQuantity").value = product.quantity;
+            document.getElementById("editPrice").value = product.price;
+            document.getElementById("editCategory").value = product.category;
+        }
